@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"unicode"
 
 	"github.com/mitchellh/iochan"
 )
@@ -191,8 +192,8 @@ func (r *RemoteCmd) Wait() {
 // cleanOutputLine cleans up a line so that '\r' don't muck up the
 // UI output when we're reading from a remote command.
 func (r *RemoteCmd) cleanOutputLine(line string) string {
-	// Trim surrounding whitespace
-	line = strings.TrimSpace(line)
+	// Trim trailing whitespace
+	line = strings.TrimRightFunc(line, unicode.IsSpace)
 
 	// Trim up to the first carriage return, since that text would be
 	// lost anyways.
